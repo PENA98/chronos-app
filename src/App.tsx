@@ -1,46 +1,83 @@
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
-import ViewMessage from './pages/ViewMessage';
+import { Redirect, Route } from "react-router-dom";
+import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import Home from "./pages/Home";
+import ViewMessage from "./pages/ViewMessage";
+import Login from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
 /* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
+import "@ionic/react/css/core.css";
 
 /* Basic CSS for apps built with Ionic */
-import '@ionic/react/css/normalize.css';
-import '@ionic/react/css/structure.css';
-import '@ionic/react/css/typography.css';
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
 
 /* Optional CSS utils that can be commented out */
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/text-alignment.css";
+import "@ionic/react/css/text-transformation.css";
+import "@ionic/react/css/flex-utils.css";
+import "@ionic/react/css/display.css";
 
 /* Theme variables */
-import './theme/variables.css';
+import "./theme/variables.css";
+import { useEffect } from "react";
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/" exact={true}>
-          <Redirect to="/home" />
-        </Route>
-        <Route path="/home" exact={true}>
-          <Home />
-        </Route>
-        <Route path="/message/:id">
-           <ViewMessage />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+//render redirect route if false
+
+const App: React.FC = () => {
+  const isAuthenticated = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      return true;
+    }
+    return false;
+  };
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route path="/" exact={true}>
+            <Redirect to="/Home" />
+          </Route>
+          <Route
+            path="/Home"
+            exact={true}
+            render={(props) =>
+              isAuthenticated() ? <Home /> : <Redirect to="/Login" />
+            }
+          />
+          <Route
+            path="/Login"
+            exact={true}
+            render={(props) =>
+              isAuthenticated() ? <Redirect to="/Home" /> : <Login />
+            }
+          />
+          <Route
+            path="/SignUp"
+            exact={true}
+            render={(props) =>
+              isAuthenticated() ? <Redirect to="/Home" /> : <SignUp />
+            }
+          />
+          <Route
+            path="/message/:id"
+            exact={true}
+            render={(props) =>
+              isAuthenticated() ? <ViewMessage /> : <Redirect to="/login" />
+            }
+          />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
