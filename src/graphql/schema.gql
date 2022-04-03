@@ -1,0 +1,97 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Collection {
+  _id: ID!
+  createdAt: DateTime!
+  description: String!
+  image: String!
+  name: String!
+  updatedAt: DateTime!
+  userID: String!
+}
+
+type CollectionItem {
+  CollectionID: String!
+  _id: ID!
+  condition: String!
+  createdAt: DateTime!
+  description: String!
+  image: String!
+  name: String!
+  price: Float!
+  updatedAt: DateTime!
+}
+
+input CreateUserInput {
+  email: String!
+  lastname: String!
+  name: String!
+  password: String!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type LoginResponse {
+  accessToken: String!
+  user: User!
+}
+
+input LoginUserInput {
+  password: String!
+  username: String!
+}
+
+type Mutation {
+  createCollection: Collection!
+  createCollectionItem: CollectionItem!
+  createUser(createUserInput: CreateUserInput!): User!
+  deleteCollection: Collection!
+  deleteCollectionItem: CollectionItem!
+  login(LoginUserInput: LoginUserInput!): LoginResponse!
+  removeUser(_id: String!): User!
+  signup(signupUserInput: SignupUserInput!): User!
+  updateCollection: Collection!
+  updateCollectionItem: CollectionItem!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  collection: Collection!
+  collectionItem: CollectionItem!
+  collectionItems: [CollectionItem!]!
+  collections: [Collection!]!
+  user(_id: String!): User!
+  users: [User!]!
+}
+
+input SignupUserInput {
+  confirmPassword: String!
+  email: String!
+  lastname: String!
+  name: String!
+  password: String!
+  username: String!
+}
+
+input UpdateUserInput {
+  email: String!
+  id: String!
+  lastname: String!
+  name: String!
+  password: String!
+  username: String!
+}
+
+type User {
+  _id: String!
+  email: String!
+  lastname: String!
+  name: String!
+  username: String!
+}
