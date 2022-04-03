@@ -72,6 +72,11 @@ const checkPasswordValidity = (value: string) => {
   return null;
 };
 
+const validateEmail = (email: string) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
+
 interface IValidPassword {
   valid: string | null;
   confirmPasswordValidity: boolean | null;
@@ -81,9 +86,9 @@ export default function SignUp() {
   const [isValidPassword, setIsValidPassword] = useState<
     IValidPassword | undefined
   >();
+  const [isValidEmail, setIsValidEmail] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isRequired, setIsRequired] = useState("");
-
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -99,6 +104,7 @@ export default function SignUp() {
       password: data.get("password")?.toString()!,
       confirmPassword: data.get("confirmPassword")?.toString()!,
     };
+
     setIsValidPassword({
       valid: checkPasswordValidity(userObject.password || ""),
       confirmPasswordValidity:
@@ -112,10 +118,11 @@ export default function SignUp() {
       ) {
         console.log(key);
         setIsRequired(`${key} is required`);
-      } else{
-        setIsRequired("");
+      } else {
       }
     }
+
+    setIsValidEmail(validateEmail(userObject.email));
     console.log(userObject);
   };
 
@@ -176,6 +183,8 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
+                  error={!isValidEmail}
+                  helperText={!isValidEmail ? "Invalid Email" : ""}
                   id="email"
                   label="Email Address"
                   name="email"
@@ -222,8 +231,23 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="confirmPassword"
-                  label="confirm password"
+                  label="Confirm password"
                   type={showPassword ? "text" : "password"}
+                  error={
+                    isValidPassword?.confirmPasswordValidity == null ||
+                    undefined
+                      ? false
+                      : isValidPassword?.confirmPasswordValidity
+                      ? false
+                      : true
+                  }
+                  helperText={
+                    isValidPassword?.confirmPasswordValidity === undefined
+                      ? null
+                      : isValidPassword?.confirmPasswordValidity
+                      ? "Passwords Match"
+                      : "Passwords Do Not Match"
+                  }
                   id="confirmPassword"
                   autoComplete="confirmPassword"
                   InputProps={{
