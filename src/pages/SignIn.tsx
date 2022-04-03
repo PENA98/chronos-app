@@ -13,6 +13,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { IonCol, IonGrid, IonItem, IonRow, IonText } from "@ionic/react";
+import { client } from "../graphql/client";
+import { useEffect } from "react";
 
 function Copyright(props: any) {
   return (
@@ -35,6 +37,20 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const dataTest = async () => {
+    const { users } = await client.query({
+      users: {
+        username: true,
+        name: true,
+      },
+    });
+    console.log(users);
+  };
+
+  useEffect(() => {
+    dataTest();
+  }, []);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -102,17 +118,18 @@ export default function SignIn() {
             </Button>
             <IonGrid>
               <IonRow>
-              <IonCol >
-                <IonItem routerLink="/forgotPassword">
-                  <IonText color="secondary">Forgot Password?</IonText>
-                </IonItem>
-              </IonCol>
-              <IonCol >
-                <IonItem routerLink="/SignUp">
-                  <IonText color="secondary">{"Don't have an account? Sign Up"}</IonText>
-                  
-                </IonItem>
-              </IonCol>
+                <IonCol>
+                  <IonItem routerLink="/forgotPassword">
+                    <IonText color="secondary">Forgot Password?</IonText>
+                  </IonItem>
+                </IonCol>
+                <IonCol>
+                  <IonItem routerLink="/SignUp">
+                    <IonText color="secondary">
+                      {"Don't have an account? Sign Up"}
+                    </IonText>
+                  </IonItem>
+                </IonCol>
               </IonRow>
             </IonGrid>
           </Box>

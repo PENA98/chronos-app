@@ -1,42 +1,122 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { IonItem, IonText } from '@ionic/react';
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { IonItem, IonText } from "@ionic/react";
+import { useState } from "react";
+import { Alert, IconButton, InputAdornment } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function Copyright(props: any) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
       <Link color="inherit" href="#">
         Chronos
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
 
 const theme = createTheme();
 
+const checkPasswordValidity = (value: string) => {
+  const isNonWhiteSpace = /^\S*$/;
+  if (!isNonWhiteSpace.test(value)) {
+    return "Password must not contain Whitespaces.";
+  }
+
+  const isContainsUppercase = /^(?=.*[A-Z]).*$/;
+  if (!isContainsUppercase.test(value)) {
+    return "Password must have at least one Uppercase Character.";
+  }
+
+  const isContainsLowercase = /^(?=.*[a-z]).*$/;
+  if (!isContainsLowercase.test(value)) {
+    return "Password must have at least one Lowercase Character.";
+  }
+
+  const isContainsNumber = /^(?=.*[0-9]).*$/;
+  if (!isContainsNumber.test(value)) {
+    return "Password must contain at least one Digit.";
+  }
+
+  const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
+  if (!isContainsSymbol.test(value)) {
+    return "Password must contain at least one Special Symbol.";
+  }
+
+  const isValidLength = /^.{6,16}$/;
+  if (!isValidLength.test(value)) {
+    return "Password must be 6-16 Characters Long.";
+  }
+
+  return null;
+};
+
+interface IValidPassword {
+  valid: string | null;
+  confirmPasswordValidity: boolean | null;
+}
+
 export default function SignUp() {
+  const [isValidPassword, setIsValidPassword] = useState<
+    IValidPassword | undefined
+  >();
+  const [showPassword, setShowPassword] = useState(false);
+  const [isRequired, setIsRequired] = useState("");
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    const userObject = {
+      name: data.get("firstName")?.toString()!,
+      lastName: data.get("lastName")?.toString()!,
+      username: data.get("username")?.toString()!,
+      email: data.get("email")?.toString()!,
+      password: data.get("password")?.toString()!,
+      confirmPassword: data.get("confirmPassword")?.toString()!,
+    };
+    setIsValidPassword({
+      valid: checkPasswordValidity(userObject.password || ""),
+      confirmPasswordValidity:
+        userObject.confirmPassword === userObject.password ? true : false,
     });
+
+    for (const key in userObject) {
+      if (
+        userObject[key as keyof typeof userObject] === undefined ||
+        userObject[key as keyof typeof userObject] === ""
+      ) {
+        console.log(key);
+        setIsRequired(`${key} is required`);
+      } else{
+        setIsRequired("");
+      }
+    }
+    console.log(userObject);
   };
 
   return (
@@ -46,20 +126,32 @@ export default function SignUp() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              {isRequired !== "" ? (
+                <Grid item xs={12} sm={12}>
+                  <Alert variant="outlined" severity="error">
+                    {isRequired}
+                  </Alert>
+                </Grid>
+              ) : null}
+              <Grid item xs={6} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
@@ -70,7 +162,7 @@ export default function SignUp() {
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -94,17 +186,59 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  id="username"
+                  label="Username"
+                  name="username"
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                <TextField
+                  required
+                  fullWidth
+                  error={isValidPassword?.valid ? true : false}
+                  helperText={isValidPassword?.valid}
+                  name="password"
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  autoComplete="new-password"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="confirm password"
+                  type={showPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  autoComplete="confirmPassword"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>
@@ -117,10 +251,11 @@ export default function SignUp() {
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
-            <IonItem routerLink="/Login">
-                  <IonText color="secondary">{"Already have an account? Sign in"}</IonText>
-                  
-                </IonItem>
+              <IonItem routerLink="/Login">
+                <IonText color="secondary">
+                  {"Already have an account? Sign in"}
+                </IonText>
+              </IonItem>
             </Grid>
           </Box>
         </Box>
