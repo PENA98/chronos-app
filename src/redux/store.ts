@@ -11,10 +11,12 @@ const store = configureStore({
     authReducer,
   }),
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
+    getDefaultMiddleware({
+      serializableCheck: false
+    })
       .prepend(appMiddle)
       .prepend(authMiddle)
-      .concat(),
+      .concat()
 });
 
 export type RootState = ReturnType<typeof store.getState>;

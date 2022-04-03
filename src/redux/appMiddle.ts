@@ -1,4 +1,4 @@
-export const appMiddle = (store: any) => (next: any) => (action: any) => {
+export const appMiddle = (store: any) => (next: any) => async (action: any) => {
   switch (action.type) {
     case "app":
       break;
@@ -6,4 +6,5 @@ export const appMiddle = (store: any) => (next: any) => (action: any) => {
     default:
       break;
   }
+  return next(action);
 };

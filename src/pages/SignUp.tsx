@@ -17,6 +17,14 @@ import { useState } from "react";
 import { Alert, IconButton, InputAdornment } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
+import {
+  handleSignUp,
+  handleIsValidPassword,
+  setShowPassword,
+  handleIsRequired,
+} from "../redux/authSlice";
 
 function Copyright(props: any) {
   return (
@@ -38,93 +46,9 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-const checkPasswordValidity = (value: string) => {
-  const isNonWhiteSpace = /^\S*$/;
-  if (!isNonWhiteSpace.test(value)) {
-    return "Password must not contain Whitespaces.";
-  }
-
-  const isContainsUppercase = /^(?=.*[A-Z]).*$/;
-  if (!isContainsUppercase.test(value)) {
-    return "Password must have at least one Uppercase Character.";
-  }
-
-  const isContainsLowercase = /^(?=.*[a-z]).*$/;
-  if (!isContainsLowercase.test(value)) {
-    return "Password must have at least one Lowercase Character.";
-  }
-
-  const isContainsNumber = /^(?=.*[0-9]).*$/;
-  if (!isContainsNumber.test(value)) {
-    return "Password must contain at least one Digit.";
-  }
-
-  const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
-  if (!isContainsSymbol.test(value)) {
-    return "Password must contain at least one Special Symbol.";
-  }
-
-  const isValidLength = /^.{6,16}$/;
-  if (!isValidLength.test(value)) {
-    return "Password must be 6-16 Characters Long.";
-  }
-
-  return null;
-};
-
-const validateEmail = (email: string) => {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-};
-
-interface IValidPassword {
-  valid: string | null;
-  confirmPasswordValidity: boolean | null;
-}
-
-export default function SignUp() {
-  const [isValidPassword, setIsValidPassword] = useState<
-    IValidPassword | undefined
-  >();
-  const [isValidEmail, setIsValidEmail] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isRequired, setIsRequired] = useState("");
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const userObject = {
-      name: data.get("firstName")?.toString()!,
-      lastName: data.get("lastName")?.toString()!,
-      username: data.get("username")?.toString()!,
-      email: data.get("email")?.toString()!,
-      password: data.get("password")?.toString()!,
-      confirmPassword: data.get("confirmPassword")?.toString()!,
-    };
-
-    setIsValidPassword({
-      valid: checkPasswordValidity(userObject.password || ""),
-      confirmPasswordValidity:
-        userObject.confirmPassword === userObject.password ? true : false,
-    });
-
-    for (const key in userObject) {
-      if (
-        userObject[key as keyof typeof userObject] === undefined ||
-        userObject[key as keyof typeof userObject] === ""
-      ) {
-        console.log(key);
-        setIsRequired(`${key} is required`);
-      } else {
-      }
-    }
-
-    setIsValidEmail(validateEmail(userObject.email));
-    console.log(userObject);
-  };
+const SignUp: React.FC = () => {
+  const data = useSelector((state: RootState) => state.authReducer);
+  const dispatch = useDispatch();
 
   return (
     <ThemeProvider theme={theme}>
@@ -147,14 +71,17 @@ export default function SignUp() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={(event: any) => {
+              event.preventDefault();
+              dispatch(handleSignUp(new FormData(event.currentTarget)));
+            }}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              {isRequired !== "" ? (
+              {data?.isRequired !== "" ? (
                 <Grid item xs={12} sm={12}>
                   <Alert variant="outlined" severity="error">
-                    {isRequired}
+                    {data?.isRequired}
                   </Alert>
                 </Grid>
               ) : null}
@@ -183,8 +110,8 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  error={!isValidEmail}
-                  helperText={!isValidEmail ? "Invalid Email" : ""}
+                  error={!data?.isValidEmail}
+                  helperText={!data?.isValidEmail ? "Invalid Email" : ""}
                   id="email"
                   label="Email Address"
                   name="email"
@@ -204,11 +131,11 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  error={isValidPassword?.valid ? true : false}
-                  helperText={isValidPassword?.valid}
+                  error={data?.isValidPassword?.valid ? true : false}
+                  helperText={data?.isValidPassword?.valid}
                   name="password"
                   label="Password"
-                  type={showPassword ? "text" : "password"}
+                  type={data?.showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="new-password"
                   InputProps={{
@@ -216,10 +143,16 @@ export default function SignUp() {
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
+                          onClick={() =>
+                            dispatch(setShowPassword(!data?.showPassword))
+                          }
                           edge="end"
                         >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                          {data?.showPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -232,19 +165,19 @@ export default function SignUp() {
                   fullWidth
                   name="confirmPassword"
                   label="Confirm password"
-                  type={showPassword ? "text" : "password"}
+                  type={data?.showPassword ? "text" : "password"}
                   error={
-                    isValidPassword?.confirmPasswordValidity == null ||
+                    data?.isValidPassword?.confirmPasswordValidity == null ||
                     undefined
                       ? false
-                      : isValidPassword?.confirmPasswordValidity
+                      : data?.isValidPassword?.confirmPasswordValidity
                       ? false
                       : true
                   }
                   helperText={
-                    isValidPassword?.confirmPasswordValidity === undefined
+                    data?.isValidPassword?.confirmPasswordValidity === undefined
                       ? null
-                      : isValidPassword?.confirmPasswordValidity
+                      : data?.isValidPassword?.confirmPasswordValidity
                       ? "Passwords Match"
                       : "Passwords Do Not Match"
                   }
@@ -255,10 +188,16 @@ export default function SignUp() {
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
+                          onClick={() =>
+                            dispatch(setShowPassword(!data?.showPassword))
+                          }
                           edge="end"
                         >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                          {data?.showPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -287,4 +226,6 @@ export default function SignUp() {
       </Container>
     </ThemeProvider>
   );
-}
+};
+
+export default SignUp;

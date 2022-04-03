@@ -1,6 +1,8 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsAuthed } from "./redux/authSlice";
 import Home from "./pages/Home";
 import ViewMessage from "./pages/ViewMessage";
 import Login from "./pages/SignIn";
@@ -25,19 +27,47 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import { useEffect } from "react";
-
+import { now } from "@ionic/core/dist/types/utils/helpers";
+import { RootState } from "./redux/store";
 setupIonicReact();
 
 //render redirect route if false
 
 const App: React.FC = () => {
+
+  const { isAuthed } = useSelector((state: RootState) => state.authReducer);
+  const dispatch = useDispatch();
+
   const isAuthenticated = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      return true;
+    const now = new Date();
+    if (now.getTime() > isAuthed.expires) {
+      console.log(isAuthed);
+      localStorage.removeItem("authed");
+      return false;
     }
-    return false;
+    return true;
   };
+
+  useEffect(() => {
+    const now = new Date();
+    const object = {
+      "data": {
+        "login": {
+          "user": {
+            "_id": "6247d31f2b0d7154f3b03602",
+            "name": "bertho",
+            "lastname": "pereh",
+            "username": "berthio1"
+          },
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJlcnRoaW8xIiwic3ViIjoiNjI0N2QzMWYyYjBkNzE1NGYzYjAzNjAyIiwiaWF0IjoxNjQ5MDI1MDM0LCJleHAiOjE2NDk2Mjk4MzR9.Kia9SAo6VtnGS6OlPwgWt7sn7j02uopp5iHjEU1yQ3Q",
+          "expires": now.getTime() + 14400000
+        }
+      }
+    }
+    localStorage.setItem("authed", JSON.stringify(object));
+    const token = localStorage.getItem("authed");
+    dispatch(setIsAuthed(token));
+  }, []);
 
   return (
     <IonApp>
