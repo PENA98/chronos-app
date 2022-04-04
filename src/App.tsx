@@ -50,7 +50,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("authed");
+    const token = JSON.parse(localStorage.getItem("authed")!);
     dispatch(setIsAuthed(token));
   }, []);
 

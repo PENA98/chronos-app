@@ -4,7 +4,7 @@ module.exports = {
         2,
         4,
         6,
-        14
+        15
     ],
     "types": {
         "Collection": {
@@ -113,7 +113,13 @@ module.exports = {
         },
         "Mutation": {
             "createCollection": [
-                0
+                0,
+                {
+                    "createCollectionInput": [
+                        14,
+                        "createCollectionInput!"
+                    ]
+                }
             ],
             "createCollectionItem": [
                 3
@@ -175,6 +181,9 @@ module.exports = {
                     ]
                 }
             ],
+            "uploadFile": [
+                2
+            ],
             "__typename": [
                 2
             ]
@@ -191,6 +200,15 @@ module.exports = {
             ],
             "collections": [
                 0
+            ],
+            "getUserCollections": [
+                0,
+                {
+                    "userID": [
+                        2,
+                        "String!"
+                    ]
+                }
             ],
             "user": [
                 13,
@@ -268,6 +286,29 @@ module.exports = {
                 2
             ],
             "username": [
+                2
+            ],
+            "__typename": [
+                2
+            ]
+        },
+        "createCollectionInput": {
+            "createdAt": [
+                6
+            ],
+            "description": [
+                2
+            ],
+            "image": [
+                2
+            ],
+            "name": [
+                2
+            ],
+            "updatedAt": [
+                6
+            ],
+            "userID": [
                 2
             ],
             "__typename": [

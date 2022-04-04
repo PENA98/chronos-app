@@ -50,6 +50,7 @@ export interface Mutation {
     updateCollection: Collection
     updateCollectionItem: CollectionItem
     updateUser: User
+    uploadFile: Scalars['String']
     __typename: 'Mutation'
 }
 
@@ -58,6 +59,7 @@ export interface Query {
     collectionItem: CollectionItem
     collectionItems: CollectionItem[]
     collections: Collection[]
+    getUserCollections: Collection[]
     user: User
     users: User[]
     __typename: 'Query'
@@ -110,7 +112,7 @@ export interface LoginResponseRequest{
 export interface LoginUserInput {password: Scalars['String'],username: Scalars['String']}
 
 export interface MutationRequest{
-    createCollection?: CollectionRequest
+    createCollection?: [{createCollectionInput: createCollectionInput},CollectionRequest]
     createCollectionItem?: CollectionItemRequest
     createUser?: [{createUserInput: CreateUserInput},UserRequest]
     deleteCollection?: CollectionRequest
@@ -121,6 +123,7 @@ export interface MutationRequest{
     updateCollection?: CollectionRequest
     updateCollectionItem?: CollectionItemRequest
     updateUser?: [{updateUserInput: UpdateUserInput},UserRequest]
+    uploadFile?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -130,6 +133,7 @@ export interface QueryRequest{
     collectionItem?: CollectionItemRequest
     collectionItems?: CollectionItemRequest
     collections?: CollectionRequest
+    getUserCollections?: [{userID: Scalars['String']},CollectionRequest]
     user?: [{_id: Scalars['String']},UserRequest]
     users?: UserRequest
     __typename?: boolean | number
@@ -149,6 +153,8 @@ export interface UserRequest{
     __typename?: boolean | number
     __scalar?: boolean | number
 }
+
+export interface createCollectionInput {createdAt: Scalars['DateTime'],description: Scalars['String'],image: Scalars['String'],name: Scalars['String'],updatedAt: Scalars['DateTime'],userID: Scalars['String']}
 
 
 const Collection_possibleTypes = ['Collection']
@@ -253,7 +259,7 @@ export interface LoginResponseObservableChain{
 }
 
 export interface MutationPromiseChain{
-    createCollection: (CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
+    createCollection: ((args: {createCollectionInput: createCollectionInput}) => CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
     createCollectionItem: (CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
     createUser: ((args: {createUserInput: CreateUserInput}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
     deleteCollection: (CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
@@ -263,11 +269,12 @@ export interface MutationPromiseChain{
     signup: ((args: {signupUserInput: SignupUserInput}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
     updateCollection: (CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
     updateCollectionItem: (CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
-    updateUser: ((args: {updateUserInput: UpdateUserInput}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>})
+    updateUser: ((args: {updateUserInput: UpdateUserInput}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
+    uploadFile: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>})
 }
 
 export interface MutationObservableChain{
-    createCollection: (CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
+    createCollection: ((args: {createCollectionInput: createCollectionInput}) => CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
     createCollectionItem: (CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
     createUser: ((args: {createUserInput: CreateUserInput}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),
     deleteCollection: (CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
@@ -277,7 +284,8 @@ export interface MutationObservableChain{
     signup: ((args: {signupUserInput: SignupUserInput}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),
     updateCollection: (CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
     updateCollectionItem: (CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
-    updateUser: ((args: {updateUserInput: UpdateUserInput}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>})
+    updateUser: ((args: {updateUserInput: UpdateUserInput}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),
+    uploadFile: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>})
 }
 
 export interface QueryPromiseChain{
@@ -285,6 +293,7 @@ export interface QueryPromiseChain{
     collectionItem: (CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
     collectionItems: ({get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>[]) => Promise<FieldsSelection<CollectionItem, R>[]>}),
     collections: ({get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>[]) => Promise<FieldsSelection<Collection, R>[]>}),
+    getUserCollections: ((args: {userID: Scalars['String']}) => {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>[]) => Promise<FieldsSelection<Collection, R>[]>}),
     user: ((args: {_id: Scalars['String']}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
     users: ({get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>[]) => Promise<FieldsSelection<User, R>[]>})
 }
@@ -294,6 +303,7 @@ export interface QueryObservableChain{
     collectionItem: (CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
     collectionItems: ({get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>[]) => Observable<FieldsSelection<CollectionItem, R>[]>}),
     collections: ({get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>[]) => Observable<FieldsSelection<Collection, R>[]>}),
+    getUserCollections: ((args: {userID: Scalars['String']}) => {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>[]) => Observable<FieldsSelection<Collection, R>[]>}),
     user: ((args: {_id: Scalars['String']}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),
     users: ({get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>[]) => Observable<FieldsSelection<User, R>[]>})
 }

@@ -48,7 +48,7 @@ input LoginUserInput {
 }
 
 type Mutation {
-  createCollection: Collection!
+  createCollection(createCollectionInput: createCollectionInput!): Collection!
   createCollectionItem: CollectionItem!
   createUser(createUserInput: CreateUserInput!): User!
   deleteCollection: Collection!
@@ -59,6 +59,7 @@ type Mutation {
   updateCollection: Collection!
   updateCollectionItem: CollectionItem!
   updateUser(updateUserInput: UpdateUserInput!): User!
+  uploadFile: String!
 }
 
 type Query {
@@ -66,6 +67,7 @@ type Query {
   collectionItem: CollectionItem!
   collectionItems: [CollectionItem!]!
   collections: [Collection!]!
+  getUserCollections(userID: String!): [Collection!]!
   user(_id: String!): User!
   users: [User!]!
 }
@@ -94,4 +96,13 @@ type User {
   lastname: String!
   name: String!
   username: String!
+}
+
+input createCollectionInput {
+  createdAt: DateTime!
+  description: String!
+  image: String!
+  name: String!
+  updatedAt: DateTime!
+  userID: String!
 }
