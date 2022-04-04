@@ -3,6 +3,14 @@ ion-item {
   --inner-padding-end: 0;
 }
 
+img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10%;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
 ion-label {
   margin-top: 12px;
   margin-bottom: 12px;
@@ -11,11 +19,13 @@ ion-label {
 ion-item h2 {
   font-weight: 600;
   margin: 0;
+  margin-left: 12px;
 }
 
 ion-item p {
   text-overflow: ellipsis;
   overflow: hidden;
+  margin-left: 12px;
   white-space: nowrap;
   width: 95%;
 }
@@ -29,6 +39,12 @@ ion-item .date {
 ion-item ion-icon {
   color: #c9c9ca;
 }
+
+ion-item ion-badge {
+  margin-right: 5px;
+}
+
+
 
 ion-item ion-note {
   font-size: 15px;

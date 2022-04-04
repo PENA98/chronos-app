@@ -13,8 +13,13 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { IonCol, IonGrid, IonItem, IonRow, IonText } from "@ionic/react";
+import { useDispatch, useSelector } from "react-redux";
 import { client } from "../graphql/client";
 import { useEffect } from "react";
+import { RootState } from "../redux/store";
+import { handleSignIn, setLoginSuccess } from "../redux/authSlice";
+import { Alert } from "@mui/material";
+import { useHistory } from "react-router-dom"
 
 function Copyright(props: any) {
   return (
@@ -36,29 +41,17 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignIn() {
-  const dataTest = async () => {
-    const { users } = await client.query({
-      users: {
-        username: true,
-        name: true,
-      },
-    });
-    console.log(users);
-  };
+const SignIn: React.FC = () => {
+  const data = useSelector((state: RootState) => state.authReducer);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
 
   useEffect(() => {
-    dataTest();
+    if (data.loginSuccess === true) {
+      console.log("login success");
+    }
   }, []);
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -78,9 +71,22 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          <Grid container spacing={2}>
+            {data?.isRequired !== "" || data?.loginError ? (
+              <Grid item marginTop={1} xs={12} sm={12}>
+                <Alert variant="outlined" severity="error">
+                  {data?.isRequired || data?.loginError}
+                </Alert>
+              </Grid>
+            ) : null}
+          </Grid>
+
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={(event: any) => {
+              event.preventDefault();
+              dispatch(handleSignIn(new FormData(event.currentTarget)));
+            }}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -88,10 +94,10 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
             />
             <TextField
@@ -138,4 +144,6 @@ export default function SignIn() {
       </Container>
     </ThemeProvider>
   );
-}
+};
+
+export default SignIn;

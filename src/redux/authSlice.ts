@@ -13,6 +13,8 @@ const initialState = {
   showPassword: false,
   isRequired: "",
   isAuthed: {} as any,
+  loginError: "",
+  loginSuccess: false,
 };
 
 const authSlice = createSlice({
@@ -21,11 +23,6 @@ const authSlice = createSlice({
   reducers: {
     handleSignUp: (state, action) => {},
     handleSignIn: (state, action) => {},
-    setSignUpCredentials: (state, action) => {
-      return produce(state, (draft) => {
-        draft.signInCredentials = action.payload;
-      });
-    },
     handleIsValidPassword: (state, action) => {},
     setIsValidPassword: (state, action) => {
       console.log("Desde", action.payload);
@@ -55,19 +52,32 @@ const authSlice = createSlice({
         draft.isAuthed = action.payload;
       });
     },
+    setLoginError: (state, action) => {
+      return produce(state, (draft) => {
+        draft.loginError = action.payload;
+      });
+    },
+    setLoginSuccess: (state, action) => {
+      console.log("Desde el slice", action.payload);
+      return produce(state, (draft) => {
+        draft.loginSuccess = action.payload;
+      });
+    }
   },
 });
 
 export const {
   handleSignUp,
-  setSignUpCredentials,
+  handleSignIn,
   handleIsValidPassword,
   setIsValidPassword,
   setIsValidEmail,
   setShowPassword,
   handleIsRequired,
   setIsRequired,
-  setIsAuthed
+  setIsAuthed,
+  setLoginError,
+  setLoginSuccess,
 } = authSlice.actions;
 
 export default authSlice.reducer;

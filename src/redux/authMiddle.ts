@@ -2,9 +2,13 @@ import {
   setIsValidPassword,
   setIsValidEmail,
   setIsRequired,
+  setShowPassword,
+  setLoginError,
+  setLoginSuccess,
 } from "./authSlice";
 import { client } from "../graphql/client";
-import { SignupUserInput } from "../graphql/generated";
+import { LoginUserInput, SignupUserInput } from "../graphql/generated";
+
 export const authMiddle = (store: any) => (next: any) => async (
   action: any
 ) => {
@@ -75,13 +79,67 @@ export const authMiddle = (store: any) => (next: any) => async (
           });
 
           console.log(response);
+          store.dispatch(setIsRequired(""));
+          store.dispatch(setShowPassword(false));
         } catch (error) {
           console.error("error al guardar", error);
         }
       }
       break;
 
-    case "auth/setShowPassword":
+    case "auth/handleSignIn":
+      const signInData = action.payload;
+      const signInObject = {
+        username: signInData.get("username")?.toString()!,
+        password: signInData.get("password")?.toString()!,
+      };
+      console.log("signInObject", signInObject);
+
+      for (const key in signInObject) {
+        if (
+          signInObject[key as keyof typeof signInObject] === undefined ||
+          signInObject[key as keyof typeof signInObject] === ""
+        ) {
+          console.log(key);
+          store.dispatch(setIsRequired(`${key} is required`));
+        } else {
+        }
+      }
+
+      if (
+        signInObject.username != undefined ||
+        ("" && signInObject.password != undefined) ||
+        ""
+      ) {
+        try {
+          const LoginUserInput: LoginUserInput = {
+            username: signInObject.username,
+            password: signInObject.password,
+          };
+
+          const response = await client.mutation({
+            login: [
+              { LoginUserInput },
+              {
+                user: { _id: true, username: true, name: true, lastname: true },
+                accessToken: true,
+              },
+            ],
+          });
+          console.log(response.login);
+          store.dispatch(setIsRequired(""));
+          store.dispatch(setLoginError(""));
+          store.dispatch(setShowPassword(false));
+          const now = new Date();
+          store.dispatch(setLoginSuccess(true));
+          localStorage.setItem("authed", JSON.stringify({...response.login , expires: now.getTime() + 14400000}));
+        } catch (error: any) {
+          console.log("error al guardar",  JSON.parse(error.message.split("\n")[0]));
+          store.dispatch(setIsRequired(""));
+          store.dispatch(setLoginError(JSON.parse(error.message.split("\n")[0]).message));
+        }
+      }
+
       break;
 
     default:

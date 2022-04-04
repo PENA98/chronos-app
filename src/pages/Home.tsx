@@ -17,6 +17,7 @@ import {
 } from "@ionic/react";
 import "./Home.css";
 import { add } from "ionicons/icons";
+import { Grid } from "@mui/material";
 
 const Home: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -40,6 +41,7 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+      <Grid spacing={2}>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
             <IonIcon icon={add} />
@@ -61,6 +63,7 @@ const Home: React.FC = () => {
             <MessageListItem key={m.id} message={m} />
           ))}
         </IonList>
+        </Grid>
       </IonContent>
     </IonPage>
   );

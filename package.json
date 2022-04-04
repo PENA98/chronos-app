@@ -25,6 +25,7 @@
     "@types/react-dom": "^16.9.10",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "connected-react-router": "^6.9.2",
     "graphql": "^15.8.0",
     "immer": "^9.0.12",
     "ionicons": "^5.4.0",
