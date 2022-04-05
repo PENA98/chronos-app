@@ -5,18 +5,30 @@ import {
   IonItemOption,
   IonItemOptions,
   IonItemSliding,
+  useIonModal,
   IonLabel,
-  IonNote,
 } from "@ionic/react";
 import { Grid } from "@mui/material";
-import { archive, createOutline, ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import { useEffect } from "react";
+import { archive, createOutline } from "ionicons/icons";
 import "./Collection.css";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
+import { deleteCollectionHandler } from "../redux/appSlice";
 
-const Collection: React.FC<any> = (prop) => {
-  useEffect(() => {
-    console.log(prop);
-  }, [prop]);
+const Collection: React.FC<any> = ({ prop, modal }) => {
+  const dispatch = useDispatch();
+
+  
+  const handleDismiss = () => {
+    dismiss();
+  };
+
+  const [present, dismiss] = useIonModal(modal, {
+    onDismiss: handleDismiss,
+    collection: prop
+  });
+
+
   return (
     <Grid item marginTop={1} xs={11} sm={11}>
       <IonItemSliding>
@@ -24,17 +36,21 @@ const Collection: React.FC<any> = (prop) => {
           <IonItemOption
             expandable
             color="secondary"
-            onClick={() => console.log("favorite clicked")}
+            onClick={() =>  present({
+              initialBreakpoint: 0.75,
+              breakpoints: [0.1, 0.75, 1],
+              swipeToClose: true,
+            })}
           >
              <IonIcon slot="start" icon={createOutline} />
             Edit
           </IonItemOption>
         </IonItemOptions>
-        <IonItem routerLink={`/message/${prop?.prop?._id}`} detail={false}>
-          <img src={prop?.prop?.image} />
+        <IonItem routerLink={`/message/${prop?._id}`} detail={false}>
+          <img src={prop?.image} />
           <IonLabel className="ion-text-wrap">
-            <h2>{prop?.prop?.name}</h2>
-            <p>{prop?.prop?.description}</p>
+            <h2>{prop?.name}</h2>
+            <p>{prop?.description}</p>
           </IonLabel>
 
           <IonBadge mode="ios" color="primary" slot="end">
@@ -43,7 +59,7 @@ const Collection: React.FC<any> = (prop) => {
         </IonItem>
 
         <IonItemOptions>
-          <IonItemOption expandable color="danger">
+          <IonItemOption expandable color="danger" onClick={() => dispatch(deleteCollectionHandler(prop?._id)) }>
             <IonIcon slot="end" icon={archive} />
             Delete
           </IonItemOption>

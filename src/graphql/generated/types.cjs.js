@@ -4,7 +4,7 @@ module.exports = {
         2,
         4,
         6,
-        15
+        16
     ],
     "types": {
         "Collection": {
@@ -134,7 +134,13 @@ module.exports = {
                 }
             ],
             "deleteCollection": [
-                0
+                0,
+                {
+                    "_id": [
+                        2,
+                        "String!"
+                    ]
+                }
             ],
             "deleteCollectionItem": [
                 3
@@ -167,7 +173,13 @@ module.exports = {
                 }
             ],
             "updateCollection": [
-                0
+                0,
+                {
+                    "updateCollectionInput": [
+                        15,
+                        "updateCollectionInput!"
+                    ]
+                }
             ],
             "updateCollectionItem": [
                 3
@@ -293,6 +305,32 @@ module.exports = {
             ]
         },
         "createCollectionInput": {
+            "createdAt": [
+                6
+            ],
+            "description": [
+                2
+            ],
+            "image": [
+                2
+            ],
+            "name": [
+                2
+            ],
+            "updatedAt": [
+                6
+            ],
+            "userID": [
+                2
+            ],
+            "__typename": [
+                2
+            ]
+        },
+        "updateCollectionInput": {
+            "_id": [
+                2
+            ],
             "createdAt": [
                 6
             ],

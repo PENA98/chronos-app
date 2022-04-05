@@ -9,6 +9,7 @@ import {
   IonFabButton,
   IonHeader,
   IonIcon,
+  IonImg,
   IonInput,
   IonItem,
   IonItemOption,
@@ -29,12 +30,15 @@ import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
 import { styled } from "@mui/material/styles";
 import "./Home.css";
 import { add } from "ionicons/icons";
-import { Box, Button, Grid, Stack } from "@mui/material";
+import { Alert, Box, Button, Grid, Stack } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import {
   handleNewCollection,
   setImage,
   handleGetCollections,
+  setCollectionImage,
+  setSuccessSaving,
+  handleCollectionEdit,
 } from "../redux/appSlice";
 import { RootState } from "../redux/store";
 import { Collection as CollectionType } from "../graphql/generated";
@@ -52,6 +56,9 @@ const Home: React.FC = () => {
   });
 
   const handleDismiss = () => {
+    setName("");
+    setDescription("");
+    dispatch(setSuccessSaving(false));
     dismiss();
   };
 
@@ -108,7 +115,11 @@ const Home: React.FC = () => {
           </IonHeader>
           <IonList>
             {appReducer?.collections.map((collection: CollectionType) => (
-              <Collection key={collection._id} prop={collection} />
+              <Collection
+                key={collection._id}
+                prop={collection}
+                modal={EditModal}
+              />
             ))}
           </IonList>
         </Grid>
@@ -138,8 +149,14 @@ const Modal: React.FC<iModal> = ({
   description,
   setDescription,
 }) => {
-  // const { loading } = useSelector((state: RootState) => state.appReducer)
+  const { appReducer } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (appReducer.successSaving) {
+      onDismiss();
+    }
+  }, [appReducer.successSaving]);
 
   return (
     <>
@@ -153,7 +170,6 @@ const Modal: React.FC<iModal> = ({
             <IonButton
               onClick={() => {
                 dispatch(handleNewCollection({ name, description }));
-                onDismiss();
               }}
             >
               Create
@@ -162,6 +178,15 @@ const Modal: React.FC<iModal> = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <Grid container spacing={2}>
+          {appReducer?.collectionError !== "" ? (
+            <Grid item marginTop={1} xs={12} sm={12}>
+              <Alert variant="outlined" severity="error">
+                {appReducer?.collectionError}
+              </Alert>
+            </Grid>
+          ) : null}
+        </Grid>
         <IonList>
           <IonItem>
             <IonLabel position="floating">Name</IonLabel>
@@ -186,7 +211,12 @@ const Modal: React.FC<iModal> = ({
                 accept="image/*"
                 id="contained-button-file"
                 multiple
-                onChange={(e: any) => dispatch(setImage(e.target.files[0]))}
+                onChange={(e: any) => {
+                  dispatch(setImage(e.target.files[0]));
+                  dispatch(
+                    setCollectionImage(URL.createObjectURL(e.target.files[0]))
+                  );
+                }}
                 type="file"
               />
               <Button
@@ -197,6 +227,135 @@ const Modal: React.FC<iModal> = ({
               >
                 Upload image of the collection
               </Button>
+
+              {appReducer?.collectionImage ? (
+                <div className="container-custom">
+                  <div className="center-custom">
+                    <Box sx={{ mt: 1, width: "200px", height: "200px" }}>
+                      <IonImg
+                        src={appReducer?.collectionImage}
+                        alt="Imagen subida"
+                      ></IonImg>
+                    </Box>
+                  </div>
+                </div>
+              ) : null}
+            </label>
+          </Stack>
+        </IonList>
+      </IonContent>
+    </>
+  );
+};
+
+interface iEditModal {
+  onDismiss: () => void;
+  collection: CollectionType;
+}
+
+const EditModal: React.FC<iEditModal> = ({ onDismiss, collection }) => {
+  const { appReducer } = useSelector((state: RootState) => state);
+  const [EditName, setEditName] = useState<string>(collection.name);
+  const [EditDescription, setEditDescription] = useState<string>(
+    collection.description
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (appReducer.successSaving) {
+      onDismiss();
+    }
+  }, [appReducer.successSaving]);
+
+  return (
+    <>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton onClick={() => onDismiss()}>Close</IonButton>
+          </IonButtons>
+          <IonTitle>Edit collection</IonTitle>
+          <IonButtons slot="end">
+            <IonButton
+              onClick={() => {
+                dispatch(
+                  handleCollectionEdit({
+                    ...collection,
+                    name: EditName,
+                    description: EditDescription,
+                    updatedAt: new Date(),
+                  })
+                );
+              }}
+            >
+              Confirm
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <Grid container spacing={2}>
+          {appReducer?.collectionError !== "" ? (
+            <Grid item marginTop={1} xs={12} sm={12}>
+              <Alert variant="outlined" severity="error">
+                {appReducer?.collectionError}
+              </Alert>
+            </Grid>
+          ) : null}
+        </Grid>
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating">Name</IonLabel>
+            <IonInput
+              placeholder="Collection name"
+              value={EditName}
+              onIonChange={(e) => setEditName(e.detail.value!)}
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">Description</IonLabel>
+            <IonInput
+              autocomplete="off"
+              placeholder="Collection description"
+              value={EditDescription}
+              onIonChange={(e) => setEditDescription(e.detail.value!)}
+            />
+          </IonItem>
+          <Stack direction="row" alignItems="center" spacing={2} marginLeft={2}>
+            <label htmlFor="contained-button-file">
+              <Input
+                accept="image/*"
+                id="contained-button-file"
+                multiple
+                onChange={(e: any) => {
+                  dispatch(setImage(e.target.files[0]));
+                  dispatch(
+                    setCollectionImage(URL.createObjectURL(e.target.files[0]))
+                  );
+                }}
+                type="file"
+              />
+              <Button
+                sx={{ mt: 2, mr: 1 }}
+                variant="contained"
+                component="span"
+                endIcon={<PhotoCameraBackIcon />}
+              >
+                Upload image of the collection
+              </Button>
+
+              {appReducer?.collectionImage || collection?.image ? (
+                <div className="container-custom">
+                  <div className="center-custom">
+                    <Box sx={{ mt: 1, width: "200px", height: "200px" }}>
+                      <IonImg
+                        src={appReducer?.collectionImage || collection?.image}
+                        alt="Imagen subida"
+                      ></IonImg>
+                    </Box>
+                  </div>
+                </div>
+              ) : null}
             </label>
           </Stack>
         </IonList>

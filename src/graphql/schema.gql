@@ -51,12 +51,12 @@ type Mutation {
   createCollection(createCollectionInput: createCollectionInput!): Collection!
   createCollectionItem: CollectionItem!
   createUser(createUserInput: CreateUserInput!): User!
-  deleteCollection: Collection!
+  deleteCollection(_id: String!): Collection!
   deleteCollectionItem: CollectionItem!
   login(LoginUserInput: LoginUserInput!): LoginResponse!
   removeUser(_id: String!): User!
   signup(signupUserInput: SignupUserInput!): User!
-  updateCollection: Collection!
+  updateCollection(updateCollectionInput: updateCollectionInput!): Collection!
   updateCollectionItem: CollectionItem!
   updateUser(updateUserInput: UpdateUserInput!): User!
   uploadFile: String!
@@ -99,6 +99,16 @@ type User {
 }
 
 input createCollectionInput {
+  createdAt: DateTime!
+  description: String!
+  image: String!
+  name: String!
+  updatedAt: DateTime!
+  userID: String!
+}
+
+input updateCollectionInput {
+  _id: String!
   createdAt: DateTime!
   description: String!
   image: String!
