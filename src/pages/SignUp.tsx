@@ -58,9 +58,7 @@ const SignUp: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }} src="/chronosLogo.png" />
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
