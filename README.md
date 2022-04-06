@@ -10,7 +10,7 @@ I named my app Chronos like the Greek god of time Chronos
 
 ## Live Demo
 
-https://chronos-app.azurewebsites.net/
+http://chronos-app.azurewebsites.net/
 
 
 ## Tech Stack
