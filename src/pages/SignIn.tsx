@@ -14,17 +14,13 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { IonCol, IonGrid, IonItem, IonRow, IonText } from "@ionic/react";
 import { useDispatch, useSelector } from "react-redux";
-import { client } from "../graphql/client";
-import { useEffect } from "react";
 import { RootState } from "../redux/store";
 import {
   handleSignIn,
   setIsRequired,
-  setLoginSuccess,
   setShowPassword,
 } from "../redux/authSlice";
 import { Alert, IconButton, InputAdornment } from "@mui/material";
-import { useHistory } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
@@ -51,7 +47,6 @@ const theme = createTheme();
 const SignIn: React.FC = () => {
   const data = useSelector((state: RootState) => state.authReducer);
   const dispatch = useDispatch();
-  const history = useHistory();
 
   return (
     <ThemeProvider theme={theme}>

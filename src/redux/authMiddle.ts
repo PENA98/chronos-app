@@ -56,9 +56,9 @@ export const authMiddle = (store: any) => (next: any) => async (
         isValid.valid === null &&
         isValid.confirmPasswordValidity &&
         validEmail &&
-        (userObject.name != undefined || "") &&
-        (userObject.lastName != undefined || "") &&
-        (userObject.username != undefined || "")
+        (userObject.name !== undefined || "") &&
+        (userObject.lastName !== undefined || "") &&
+        (userObject.username !== undefined || "")
       ) {
         try {
           const signupUserInput: SignupUserInput = {
@@ -70,7 +70,7 @@ export const authMiddle = (store: any) => (next: any) => async (
             confirmPassword: userObject.confirmPassword,
           };
 
-          const response = await client
+          await client
             .mutation({
               signup: [{ signupUserInput }, { username: true, _id: true }],
             })
@@ -107,8 +107,8 @@ export const authMiddle = (store: any) => (next: any) => async (
       }
 
       if (
-        signInObject.username != undefined ||
-        ("" && signInObject.password != undefined) ||
+        signInObject.username !== undefined ||
+        ("" && signInObject.password !== undefined) ||
         ""
       ) {
         try {
@@ -117,7 +117,7 @@ export const authMiddle = (store: any) => (next: any) => async (
             password: signInObject.password,
           };
 
-          const response = await client
+          await client
             .mutation({
               login: [
                 { LoginUserInput },
@@ -203,6 +203,6 @@ const checkPasswordValidity = async (value: string) => {
 };
 
 const validateEmail = (email: string) => {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };

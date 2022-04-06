@@ -11,9 +11,8 @@ import {
 import { Grid } from "@mui/material";
 import { archive, createOutline } from "ionicons/icons";
 import "./Collection.css";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../redux/store";
 import { deleteCollectionHandler, setSuccessSaving } from "../redux/appSlice";
+import { useDispatch } from "react-redux";
 
 const Collection: React.FC<any> = ({ prop, modal }) => {
   const dispatch = useDispatch();
@@ -48,7 +47,7 @@ const Collection: React.FC<any> = ({ prop, modal }) => {
           </IonItemOption>
         </IonItemOptions>
         <IonItem routerLink={`/collection/${prop?._id}`} detail={false}>
-          <img src={prop?.image} />
+          <img src={prop?.image} alt={prop?.name} />
           <IonLabel className="ion-text-wrap">
             <h2>{prop?.name}</h2>
             <p>{prop?.description}</p>
