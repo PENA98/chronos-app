@@ -1,4 +1,3 @@
-
 ![Logo](https://i.imgur.com/LtCEdEC.png)
 
 
@@ -117,10 +116,6 @@ chronos
 └─ tsconfig.json
 
 ```
-## Authors
-
-- [@MaynorPeña](https://github.com/PENA98)
-
 
 ## Screenshots
 CI/CD Deployment
@@ -134,3 +129,7 @@ Edit
 
 delete
 ![CI/CD](https://imgur.com/bx6Wa6u.png) 
+
+## Authors
+
+- [@MaynorPeña](https://github.com/PENA98)
