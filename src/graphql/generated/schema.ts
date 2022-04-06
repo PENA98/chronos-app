@@ -3,7 +3,6 @@ import {FieldsSelection,Observable} from '@genql/runtime'
 export type Scalars = {
     ID: string,
     String: string,
-    Float: number,
     DateTime: any,
     Boolean: boolean,
 }
@@ -20,14 +19,14 @@ export interface Collection {
 }
 
 export interface CollectionItem {
-    CollectionID: Scalars['String']
     _id: Scalars['ID']
+    collectionID: Scalars['String']
     condition: Scalars['String']
     createdAt: Scalars['DateTime']
     description: Scalars['String']
     image: Scalars['String']
     name: Scalars['String']
-    price: Scalars['Float']
+    price: Scalars['String']
     updatedAt: Scalars['DateTime']
     __typename: 'CollectionItem'
 }
@@ -87,8 +86,8 @@ export interface CollectionRequest{
 }
 
 export interface CollectionItemRequest{
-    CollectionID?: boolean | number
     _id?: boolean | number
+    collectionID?: boolean | number
     condition?: boolean | number
     createdAt?: boolean | number
     description?: boolean | number
@@ -113,15 +112,15 @@ export interface LoginUserInput {password: Scalars['String'],username: Scalars['
 
 export interface MutationRequest{
     createCollection?: [{createCollectionInput: createCollectionInput},CollectionRequest]
-    createCollectionItem?: CollectionItemRequest
+    createCollectionItem?: [{createCollectionItemInput: createCollectionItemInput},CollectionItemRequest]
     createUser?: [{createUserInput: CreateUserInput},UserRequest]
     deleteCollection?: [{_id: Scalars['String']},CollectionRequest]
-    deleteCollectionItem?: CollectionItemRequest
+    deleteCollectionItem?: [{id: Scalars['String']},CollectionItemRequest]
     login?: [{LoginUserInput: LoginUserInput},LoginResponseRequest]
     removeUser?: [{_id: Scalars['String']},UserRequest]
     signup?: [{signupUserInput: SignupUserInput},UserRequest]
     updateCollection?: [{updateCollectionInput: updateCollectionInput},CollectionRequest]
-    updateCollectionItem?: CollectionItemRequest
+    updateCollectionItem?: [{collectionItem: updateCollectionItemInput},CollectionItemRequest]
     updateUser?: [{updateUserInput: UpdateUserInput},UserRequest]
     uploadFile?: boolean | number
     __typename?: boolean | number
@@ -129,9 +128,9 @@ export interface MutationRequest{
 }
 
 export interface QueryRequest{
-    collection?: CollectionRequest
+    collection?: [{collectionID: Scalars['String']},CollectionRequest]
     collectionItem?: CollectionItemRequest
-    collectionItems?: CollectionItemRequest
+    collectionItems?: [{collectionID: Scalars['String']},CollectionItemRequest]
     collections?: CollectionRequest
     getUserCollections?: [{userID: Scalars['String']},CollectionRequest]
     user?: [{_id: Scalars['String']},UserRequest]
@@ -156,7 +155,11 @@ export interface UserRequest{
 
 export interface createCollectionInput {createdAt: Scalars['DateTime'],description: Scalars['String'],image: Scalars['String'],name: Scalars['String'],updatedAt: Scalars['DateTime'],userID: Scalars['String']}
 
+export interface createCollectionItemInput {collectionID: Scalars['String'],condition: Scalars['String'],createdAt: Scalars['DateTime'],description: Scalars['String'],image: Scalars['String'],name: Scalars['String'],price: Scalars['String'],updatedAt: Scalars['DateTime']}
+
 export interface updateCollectionInput {_id: Scalars['String'],createdAt: Scalars['DateTime'],description: Scalars['String'],image: Scalars['String'],name: Scalars['String'],updatedAt: Scalars['DateTime'],userID: Scalars['String']}
+
+export interface updateCollectionItemInput {_id: Scalars['String'],collectionID: Scalars['String'],condition: Scalars['String'],createdAt: Scalars['DateTime'],description: Scalars['String'],image: Scalars['String'],name: Scalars['String'],price: Scalars['String'],updatedAt: Scalars['DateTime']}
 
 
 const Collection_possibleTypes = ['Collection']
@@ -227,26 +230,26 @@ export interface CollectionObservableChain{
 }
 
 export interface CollectionItemPromiseChain{
-    CollectionID: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     _id: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Promise<Scalars['ID']>}),
+    collectionID: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     condition: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     createdAt: ({get: (request?: boolean|number, defaultValue?: Scalars['DateTime']) => Promise<Scalars['DateTime']>}),
     description: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     image: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     name: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
-    price: ({get: (request?: boolean|number, defaultValue?: Scalars['Float']) => Promise<Scalars['Float']>}),
+    price: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     updatedAt: ({get: (request?: boolean|number, defaultValue?: Scalars['DateTime']) => Promise<Scalars['DateTime']>})
 }
 
 export interface CollectionItemObservableChain{
-    CollectionID: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     _id: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Observable<Scalars['ID']>}),
+    collectionID: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     condition: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     createdAt: ({get: (request?: boolean|number, defaultValue?: Scalars['DateTime']) => Observable<Scalars['DateTime']>}),
     description: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     image: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     name: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
-    price: ({get: (request?: boolean|number, defaultValue?: Scalars['Float']) => Observable<Scalars['Float']>}),
+    price: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     updatedAt: ({get: (request?: boolean|number, defaultValue?: Scalars['DateTime']) => Observable<Scalars['DateTime']>})
 }
 
@@ -262,38 +265,38 @@ export interface LoginResponseObservableChain{
 
 export interface MutationPromiseChain{
     createCollection: ((args: {createCollectionInput: createCollectionInput}) => CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
-    createCollectionItem: (CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
+    createCollectionItem: ((args: {createCollectionItemInput: createCollectionItemInput}) => CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
     createUser: ((args: {createUserInput: CreateUserInput}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
     deleteCollection: ((args: {_id: Scalars['String']}) => CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
-    deleteCollectionItem: (CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
+    deleteCollectionItem: ((args: {id: Scalars['String']}) => CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
     login: ((args: {LoginUserInput: LoginUserInput}) => LoginResponsePromiseChain & {get: <R extends LoginResponseRequest>(request: R, defaultValue?: FieldsSelection<LoginResponse, R>) => Promise<FieldsSelection<LoginResponse, R>>}),
     removeUser: ((args: {_id: Scalars['String']}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
     signup: ((args: {signupUserInput: SignupUserInput}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
     updateCollection: ((args: {updateCollectionInput: updateCollectionInput}) => CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
-    updateCollectionItem: (CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
+    updateCollectionItem: ((args: {collectionItem: updateCollectionItemInput}) => CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
     updateUser: ((args: {updateUserInput: UpdateUserInput}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
     uploadFile: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>})
 }
 
 export interface MutationObservableChain{
     createCollection: ((args: {createCollectionInput: createCollectionInput}) => CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
-    createCollectionItem: (CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
+    createCollectionItem: ((args: {createCollectionItemInput: createCollectionItemInput}) => CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
     createUser: ((args: {createUserInput: CreateUserInput}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),
     deleteCollection: ((args: {_id: Scalars['String']}) => CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
-    deleteCollectionItem: (CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
+    deleteCollectionItem: ((args: {id: Scalars['String']}) => CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
     login: ((args: {LoginUserInput: LoginUserInput}) => LoginResponseObservableChain & {get: <R extends LoginResponseRequest>(request: R, defaultValue?: FieldsSelection<LoginResponse, R>) => Observable<FieldsSelection<LoginResponse, R>>}),
     removeUser: ((args: {_id: Scalars['String']}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),
     signup: ((args: {signupUserInput: SignupUserInput}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),
     updateCollection: ((args: {updateCollectionInput: updateCollectionInput}) => CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
-    updateCollectionItem: (CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
+    updateCollectionItem: ((args: {collectionItem: updateCollectionItemInput}) => CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
     updateUser: ((args: {updateUserInput: UpdateUserInput}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),
     uploadFile: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>})
 }
 
 export interface QueryPromiseChain{
-    collection: (CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
+    collection: ((args: {collectionID: Scalars['String']}) => CollectionPromiseChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Promise<FieldsSelection<Collection, R>>}),
     collectionItem: (CollectionItemPromiseChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Promise<FieldsSelection<CollectionItem, R>>}),
-    collectionItems: ({get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>[]) => Promise<FieldsSelection<CollectionItem, R>[]>}),
+    collectionItems: ((args: {collectionID: Scalars['String']}) => {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>[]) => Promise<FieldsSelection<CollectionItem, R>[]>}),
     collections: ({get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>[]) => Promise<FieldsSelection<Collection, R>[]>}),
     getUserCollections: ((args: {userID: Scalars['String']}) => {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>[]) => Promise<FieldsSelection<Collection, R>[]>}),
     user: ((args: {_id: Scalars['String']}) => UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>}),
@@ -301,9 +304,9 @@ export interface QueryPromiseChain{
 }
 
 export interface QueryObservableChain{
-    collection: (CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
+    collection: ((args: {collectionID: Scalars['String']}) => CollectionObservableChain & {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>) => Observable<FieldsSelection<Collection, R>>}),
     collectionItem: (CollectionItemObservableChain & {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>) => Observable<FieldsSelection<CollectionItem, R>>}),
-    collectionItems: ({get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>[]) => Observable<FieldsSelection<CollectionItem, R>[]>}),
+    collectionItems: ((args: {collectionID: Scalars['String']}) => {get: <R extends CollectionItemRequest>(request: R, defaultValue?: FieldsSelection<CollectionItem, R>[]) => Observable<FieldsSelection<CollectionItem, R>[]>}),
     collections: ({get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>[]) => Observable<FieldsSelection<Collection, R>[]>}),
     getUserCollections: ((args: {userID: Scalars['String']}) => {get: <R extends CollectionRequest>(request: R, defaultValue?: FieldsSelection<Collection, R>[]) => Observable<FieldsSelection<Collection, R>[]>}),
     user: ((args: {_id: Scalars['String']}) => UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>}),

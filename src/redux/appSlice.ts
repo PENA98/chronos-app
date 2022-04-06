@@ -7,9 +7,14 @@ const appSlice = createSlice({
     loading: false,
     image: null,
     collections: [],
+    collection: {},
+    collectionItems: [],
     collectionError: "",
     collectionImage: "",
+    collectionItemImage: "",
+    collectionItemError: "",
     successSaving: false,
+    disableButton: false,
   },
   reducers: {
     setLoading: (state, action) => {
@@ -24,6 +29,7 @@ const appSlice = createSlice({
       });
     },
     handleGetCollections: (state, action) => {},
+    handleGetCollection: (state, action) => {},
     setCollections: (state, action) => {
       return produce(state, (draft) => {
         draft.collections = action.payload;
@@ -46,6 +52,35 @@ const appSlice = createSlice({
       });
     },
     handleCollectionEdit: (state, action) => {},
+    handleNewCollectionItem:(state, action) => {},
+    handleGetCollectionItems:(state, action) => {},
+    handleDeleteCollectionItem:(state, action) => {},
+    handleEditCollectionItem:(state, action) => {},
+    setCollectionItemImage:(state, action) => {
+      return produce(state, (draft) => {
+        draft.collectionItemImage = action.payload;
+      });
+    },
+    setCollectionItems:(state, action) => {
+      return produce(state, (draft) => {
+        draft.collectionItems = action.payload;
+      });
+    },
+    setCollectionItemError:(state, action) => {
+      return produce(state, (draft) => {
+        draft.collectionItemError = action.payload;
+      });
+    },
+    setCollection: (state, action) => {
+      return produce(state, (draft) => {
+        draft.collection = action.payload;
+      });
+    },
+    setDisableButton: (state, action) => {
+      return produce(state, (draft) => {
+        draft.disableButton = action.payload;
+      });
+    }
   },
 });
 
@@ -60,6 +95,16 @@ export const {
   setCollectionImage,
   setSuccessSaving,
   handleCollectionEdit,
+  handleNewCollectionItem,
+  handleGetCollectionItems,
+  handleDeleteCollectionItem,
+  handleEditCollectionItem,
+  setCollectionItemImage,
+  setCollectionItems,
+  setCollectionItemError,
+  handleGetCollection,
+  setCollection,
+  setDisableButton
 } = appSlice.actions;
 
 export default appSlice.reducer;

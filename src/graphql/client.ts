@@ -1,11 +1,19 @@
 import { createClient } from "./generated";
 
-const { accessToken } = JSON.parse(localStorage.getItem("authed")!);
-console.log("token", accessToken);
+let bearerToken = "";
+try {
+  const { accessToken } = JSON.parse(localStorage.getItem("authed")!);
+  bearerToken = accessToken
+  console.log("token", accessToken);
+  
+} catch (error) {
+  console.log("error", error);
+}
+
 export const client = createClient({
-  url: "http://localhost:3000/graphql",
+  url: `${process.env.REACT_APP_API_URI}/graphql`,
   headers: {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${accessToken}`,
+    Authorization: `Bearer ${bearerToken}`,
   },
 });

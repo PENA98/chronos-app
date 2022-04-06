@@ -17,9 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { client } from "../graphql/client";
 import { useEffect } from "react";
 import { RootState } from "../redux/store";
-import { handleSignIn, setLoginSuccess } from "../redux/authSlice";
-import { Alert } from "@mui/material";
+import { handleSignIn, setIsRequired, setLoginSuccess, setShowPassword } from "../redux/authSlice";
+import { Alert, IconButton, InputAdornment } from "@mui/material";
 import { useHistory } from "react-router-dom"
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function Copyright(props: any) {
   return (
@@ -106,9 +108,28 @@ const SignIn: React.FC = () => {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={data?.showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() =>
+                        dispatch(setShowPassword(!data?.showPassword))
+                      }
+                      edge="end"
+                    >
+                      {data?.showPassword ? (
+                        <Visibility />
+                      ) : (
+                        <VisibilityOff />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -130,7 +151,7 @@ const SignIn: React.FC = () => {
                   </IonItem>
                 </IonCol>
                 <IonCol>
-                  <IonItem routerLink="/SignUp">
+                  <IonItem routerLink="/SignUp" onClick={() => {dispatch(setShowPassword(false)); dispatch(setIsRequired(""))}}>
                     <IonText color="secondary">
                       {"Don't have an account? Sign Up"}
                     </IonText>

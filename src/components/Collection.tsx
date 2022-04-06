@@ -13,13 +13,14 @@ import { archive, createOutline } from "ionicons/icons";
 import "./Collection.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
-import { deleteCollectionHandler } from "../redux/appSlice";
+import { deleteCollectionHandler, setSuccessSaving } from "../redux/appSlice";
 
 const Collection: React.FC<any> = ({ prop, modal }) => {
   const dispatch = useDispatch();
 
   
   const handleDismiss = () => {
+    dispatch(setSuccessSaving(false));
     dismiss();
   };
 
@@ -46,7 +47,7 @@ const Collection: React.FC<any> = ({ prop, modal }) => {
             Edit
           </IonItemOption>
         </IonItemOptions>
-        <IonItem routerLink={`/message/${prop?._id}`} detail={false}>
+        <IonItem routerLink={`/collection/${prop?._id}`} detail={false}>
           <img src={prop?.image} />
           <IonLabel className="ion-text-wrap">
             <h2>{prop?.name}</h2>

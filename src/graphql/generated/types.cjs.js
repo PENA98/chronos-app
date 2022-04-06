@@ -2,9 +2,8 @@ module.exports = {
     "scalars": [
         1,
         2,
-        4,
-        6,
-        16
+        5,
+        17
     ],
     "types": {
         "Collection": {
@@ -12,7 +11,7 @@ module.exports = {
                 1
             ],
             "createdAt": [
-                6
+                5
             ],
             "description": [
                 2
@@ -24,7 +23,7 @@ module.exports = {
                 2
             ],
             "updatedAt": [
-                6
+                5
             ],
             "userID": [
                 2
@@ -36,17 +35,17 @@ module.exports = {
         "ID": {},
         "String": {},
         "CollectionItem": {
-            "CollectionID": [
-                2
-            ],
             "_id": [
                 1
+            ],
+            "collectionID": [
+                2
             ],
             "condition": [
                 2
             ],
             "createdAt": [
-                6
+                5
             ],
             "description": [
                 2
@@ -58,16 +57,15 @@ module.exports = {
                 2
             ],
             "price": [
-                4
+                2
             ],
             "updatedAt": [
-                6
+                5
             ],
             "__typename": [
                 2
             ]
         },
-        "Float": {},
         "CreateUserInput": {
             "email": [
                 2
@@ -94,7 +92,7 @@ module.exports = {
                 2
             ],
             "user": [
-                13
+                12
             ],
             "__typename": [
                 2
@@ -116,19 +114,25 @@ module.exports = {
                 0,
                 {
                     "createCollectionInput": [
-                        14,
+                        13,
                         "createCollectionInput!"
                     ]
                 }
             ],
             "createCollectionItem": [
-                3
+                3,
+                {
+                    "createCollectionItemInput": [
+                        14,
+                        "createCollectionItemInput!"
+                    ]
+                }
             ],
             "createUser": [
-                13,
+                12,
                 {
                     "createUserInput": [
-                        5,
+                        4,
                         "CreateUserInput!"
                     ]
                 }
@@ -143,19 +147,25 @@ module.exports = {
                 }
             ],
             "deleteCollectionItem": [
-                3
+                3,
+                {
+                    "id": [
+                        2,
+                        "String!"
+                    ]
+                }
             ],
             "login": [
-                7,
+                6,
                 {
                     "LoginUserInput": [
-                        8,
+                        7,
                         "LoginUserInput!"
                     ]
                 }
             ],
             "removeUser": [
-                13,
+                12,
                 {
                     "_id": [
                         2,
@@ -164,10 +174,10 @@ module.exports = {
                 }
             ],
             "signup": [
-                13,
+                12,
                 {
                     "signupUserInput": [
-                        11,
+                        10,
                         "SignupUserInput!"
                     ]
                 }
@@ -182,13 +192,19 @@ module.exports = {
                 }
             ],
             "updateCollectionItem": [
-                3
+                3,
+                {
+                    "collectionItem": [
+                        16,
+                        "updateCollectionItemInput!"
+                    ]
+                }
             ],
             "updateUser": [
-                13,
+                12,
                 {
                     "updateUserInput": [
-                        12,
+                        11,
                         "UpdateUserInput!"
                     ]
                 }
@@ -202,13 +218,25 @@ module.exports = {
         },
         "Query": {
             "collection": [
-                0
+                0,
+                {
+                    "collectionID": [
+                        2,
+                        "String!"
+                    ]
+                }
             ],
             "collectionItem": [
                 3
             ],
             "collectionItems": [
-                3
+                3,
+                {
+                    "collectionID": [
+                        2,
+                        "String!"
+                    ]
+                }
             ],
             "collections": [
                 0
@@ -223,7 +251,7 @@ module.exports = {
                 }
             ],
             "user": [
-                13,
+                12,
                 {
                     "_id": [
                         2,
@@ -232,7 +260,7 @@ module.exports = {
                 }
             ],
             "users": [
-                13
+                12
             ],
             "__typename": [
                 2
@@ -306,7 +334,7 @@ module.exports = {
         },
         "createCollectionInput": {
             "createdAt": [
-                6
+                5
             ],
             "description": [
                 2
@@ -318,10 +346,39 @@ module.exports = {
                 2
             ],
             "updatedAt": [
-                6
+                5
             ],
             "userID": [
                 2
+            ],
+            "__typename": [
+                2
+            ]
+        },
+        "createCollectionItemInput": {
+            "collectionID": [
+                2
+            ],
+            "condition": [
+                2
+            ],
+            "createdAt": [
+                5
+            ],
+            "description": [
+                2
+            ],
+            "image": [
+                2
+            ],
+            "name": [
+                2
+            ],
+            "price": [
+                2
+            ],
+            "updatedAt": [
+                5
             ],
             "__typename": [
                 2
@@ -332,7 +389,7 @@ module.exports = {
                 2
             ],
             "createdAt": [
-                6
+                5
             ],
             "description": [
                 2
@@ -344,10 +401,42 @@ module.exports = {
                 2
             ],
             "updatedAt": [
-                6
+                5
             ],
             "userID": [
                 2
+            ],
+            "__typename": [
+                2
+            ]
+        },
+        "updateCollectionItemInput": {
+            "_id": [
+                2
+            ],
+            "collectionID": [
+                2
+            ],
+            "condition": [
+                2
+            ],
+            "createdAt": [
+                5
+            ],
+            "description": [
+                2
+            ],
+            "image": [
+                2
+            ],
+            "name": [
+                2
+            ],
+            "price": [
+                2
+            ],
+            "updatedAt": [
+                5
             ],
             "__typename": [
                 2

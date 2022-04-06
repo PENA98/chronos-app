@@ -74,15 +74,23 @@ export const authMiddle = (store: any) => (next: any) => async (
             confirmPassword: userObject.confirmPassword,
           };
 
-          const response = await client.mutation({
-            signup: [{ signupUserInput }, { username: true, _id: true }],
-          });
+          const response = await client
+            .mutation({
+              signup: [{ signupUserInput }, { username: true, _id: true }],
+            })
+            .then((res) => {
+              console.log(res);
+              store.dispatch(setIsRequired(""));
+              store.dispatch(setShowPassword(false));
+              window.location.replace("#");
+            });
 
           console.log(response);
           store.dispatch(setIsRequired(""));
           store.dispatch(setShowPassword(false));
-        } catch (error) {
-          console.error("error al guardar", error);
+        } catch (error: any) {
+          console.log("error al guardar",  error.message.split("\n")[0]);
+          store.dispatch(setIsRequired(error.message.split("\n")[0]));
         }
       }
       break;
@@ -117,26 +125,46 @@ export const authMiddle = (store: any) => (next: any) => async (
             password: signInObject.password,
           };
 
-          const response = await client.mutation({
-            login: [
-              { LoginUserInput },
-              {
-                user: { _id: true, username: true, name: true, lastname: true },
-                accessToken: true,
-              },
-            ],
-          });
-          console.log(response.login);
-          store.dispatch(setIsRequired(""));
-          store.dispatch(setLoginError(""));
-          store.dispatch(setShowPassword(false));
-          const now = new Date();
-          store.dispatch(setLoginSuccess(true));
-          localStorage.setItem("authed", JSON.stringify({...response.login , expires: now.getTime() + 14400000}));
+          const response = await client
+            .mutation({
+              login: [
+                { LoginUserInput },
+                {
+                  user: {
+                    _id: true,
+                    username: true,
+                    name: true,
+                    lastname: true,
+                  },
+                  accessToken: true,
+                },
+              ],
+            })
+            .then((res) => {
+              store.dispatch(setIsRequired(""));
+              store.dispatch(setLoginError(""));
+              store.dispatch(setShowPassword(false));
+              const now = new Date();
+              store.dispatch(setLoginSuccess(true));
+              localStorage.setItem(
+                "authed",
+                JSON.stringify({
+                  ...res.login,
+                  expires: now.getTime() + 14400000,
+                })
+              );
+              console.log(res.login);
+              window.location.replace("#");
+            });
         } catch (error: any) {
-          console.log("error al guardar",  JSON.parse(error.message.split("\n")[0]));
+          console.log(
+            "error al guardar",
+            JSON.parse(error.message.split("\n")[0])
+          );
           store.dispatch(setIsRequired(""));
-          store.dispatch(setLoginError(JSON.parse(error.message.split("\n")[0]).message));
+          store.dispatch(
+            setLoginError(JSON.parse(error.message.split("\n")[0]).message)
+          );
         }
       }
 

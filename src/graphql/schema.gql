@@ -13,14 +13,14 @@ type Collection {
 }
 
 type CollectionItem {
-  CollectionID: String!
   _id: ID!
+  collectionID: String!
   condition: String!
   createdAt: DateTime!
   description: String!
   image: String!
   name: String!
-  price: Float!
+  price: String!
   updatedAt: DateTime!
 }
 
@@ -49,23 +49,23 @@ input LoginUserInput {
 
 type Mutation {
   createCollection(createCollectionInput: createCollectionInput!): Collection!
-  createCollectionItem: CollectionItem!
+  createCollectionItem(createCollectionItemInput: createCollectionItemInput!): CollectionItem!
   createUser(createUserInput: CreateUserInput!): User!
   deleteCollection(_id: String!): Collection!
-  deleteCollectionItem: CollectionItem!
+  deleteCollectionItem(id: String!): CollectionItem!
   login(LoginUserInput: LoginUserInput!): LoginResponse!
   removeUser(_id: String!): User!
   signup(signupUserInput: SignupUserInput!): User!
   updateCollection(updateCollectionInput: updateCollectionInput!): Collection!
-  updateCollectionItem: CollectionItem!
+  updateCollectionItem(collectionItem: updateCollectionItemInput!): CollectionItem!
   updateUser(updateUserInput: UpdateUserInput!): User!
   uploadFile: String!
 }
 
 type Query {
-  collection: Collection!
+  collection(collectionID: String!): Collection!
   collectionItem: CollectionItem!
-  collectionItems: [CollectionItem!]!
+  collectionItems(collectionID: String!): [CollectionItem!]!
   collections: [Collection!]!
   getUserCollections(userID: String!): [Collection!]!
   user(_id: String!): User!
@@ -107,6 +107,17 @@ input createCollectionInput {
   userID: String!
 }
 
+input createCollectionItemInput {
+  collectionID: String!
+  condition: String!
+  createdAt: DateTime!
+  description: String!
+  image: String!
+  name: String!
+  price: String!
+  updatedAt: DateTime!
+}
+
 input updateCollectionInput {
   _id: String!
   createdAt: DateTime!
@@ -115,4 +126,16 @@ input updateCollectionInput {
   name: String!
   updatedAt: DateTime!
   userID: String!
+}
+
+input updateCollectionItemInput {
+  _id: String!
+  collectionID: String!
+  condition: String!
+  createdAt: DateTime!
+  description: String!
+  image: String!
+  name: String!
+  price: String!
+  updatedAt: DateTime!
 }

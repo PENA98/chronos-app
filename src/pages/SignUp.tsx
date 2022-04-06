@@ -24,6 +24,7 @@ import {
   handleIsValidPassword,
   setShowPassword,
   handleIsRequired,
+  setIsRequired,
 } from "../redux/authSlice";
 
 function Copyright(props: any) {
@@ -214,7 +215,7 @@ const SignUp: React.FC = () => {
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
-              <IonItem routerLink="/Login">
+              <IonItem routerLink="/Login" onClick={() => {dispatch(setShowPassword(false)); dispatch(setIsRequired(""))}}>
                 <IonText color="secondary">
                   {"Already have an account? Sign in"}
                 </IonText>
