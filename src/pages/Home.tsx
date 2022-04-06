@@ -25,7 +25,7 @@ import {
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
 import { styled } from "@mui/material/styles";
 import "./Home.css";
-import { add } from "ionicons/icons";
+import { add, logOutOutline } from "ionicons/icons";
 import { Alert, Box, Button, Grid, Stack } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -73,7 +73,7 @@ const Home: React.FC = () => {
   return (
     <IonPage id="home-page">
       <IonFab vertical="bottom" horizontal="end" slot="fixed">
-        <IonFabButton 
+        <IonFabButton
           onClick={() =>
             present({
               initialBreakpoint: 0.75,
@@ -89,18 +89,25 @@ const Home: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Chronos</IonTitle>
+          <IonIcon
+            slot="end"
+            style={{ margin: 10, height: 30, width: 30, cursor: "pointer" }}
+            icon={logOutOutline}
+            onClick={() => {
+              localStorage.removeItem("authed");
+              window.location.replace("#");
+            }}
+          />
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-
-        {appReducer.collections.length === 0 && appReducer?.loading === false ? (
-        <IonText color="primary">
-          <h1>It appears that you have no collections, try adding one!</h1>
-        </IonText>): null}
-        <IonProgressBar
-          type="indeterminate"
-          hidden={!appReducer?.loading}
-        />
+        {appReducer.collections.length === 0 &&
+        appReducer?.loading === false ? (
+          <IonText color="primary">
+            <h1>It appears that you have no collections, try adding one!</h1>
+          </IonText>
+        ) : null}
+        <IonProgressBar type="indeterminate" hidden={!appReducer?.loading} />
         <Grid>
           <IonRefresher slot="fixed" onIonRefresh={refresh}>
             <IonRefresherContent></IonRefresherContent>
