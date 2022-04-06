@@ -25,9 +25,7 @@ const authSlice = createSlice({
     handleSignIn: (state, action) => {},
     handleIsValidPassword: (state, action) => {},
     setIsValidPassword: (state, action) => {
-      console.log("Desde", action.payload);
       return produce(state, (draft) => {
-        console.log("Desde el slice", action.payload);
         draft.isValidPassword = action.payload;
       });
     },
@@ -58,11 +56,10 @@ const authSlice = createSlice({
       });
     },
     setLoginSuccess: (state, action) => {
-      console.log("Desde el slice", action.payload);
       return produce(state, (draft) => {
         draft.loginSuccess = action.payload;
       });
-    }
+    },
   },
 });
 

@@ -24,7 +24,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
   const { appReducer, authReducer } = store.getState();
   switch (action.type) {
     case "app/handleNewCollection":
-      console.log("Desde el middle", action.payload);
       store.dispatch(setDisableButton(true));
 
       if (
@@ -35,7 +34,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
         appReducer.image !== null
       ) {
         try {
-          console.log("Desde el middle", store.getState());
           const { appReducer, authReducer } = store.getState();
           const file = new FormData();
           file.append("file", appReducer.image);
@@ -69,8 +67,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                 ],
               });
 
-              console.log(response);
-              console.log("res", res);
             })
             .then(() => {
               store.dispatch(handleGetCollections({}));
@@ -110,7 +106,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
             },
           ],
         });
-        console.log(response.getUserCollections);
         store.dispatch(setCollections(response.getUserCollections));
         store.dispatch(setLoading(false));
       } catch (error) {
@@ -120,24 +115,19 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
       break;
 
     case "app/deleteCollectionHandler":
-      console.log("delete collection", action.payload);
 
       try {
         const response = await client.mutation({
           deleteCollection: [{ _id: action.payload }, { _id: true }],
         });
         store.dispatch(handleGetCollections({}));
-        console.log(response);
       } catch (error) {
         store.dispatch(handleGetCollections({}));
-        console.log("error", error);
       }
 
       break;
 
     case "app/handleCollectionEdit":
-      console.log("Desde el middle", action.payload);
-      console.log("nosta", appReducer.image);
       store.dispatch(setDisableButton(true));
 
       if (
@@ -147,7 +137,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
         action.payload.description !== undefined
       ) {
         try {
-          console.log("Desde el middle", store.getState());
 
           if (appReducer.image === null) {
             const updateObject = action.payload;
@@ -166,13 +155,11 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                 store.dispatch(setCollectionError(""));
                 store.dispatch(setDisableButton(false));
               });
-            console.log("response", response);
           } else {
             const file = new FormData();
             file.append("file", appReducer.image);
             console.warn("File", appReducer.image);
             const url = `${process.env.REACT_APP_API_URI}/uploadImage`;
-            console.log("url", appReducer.image);
             axios.post(url, file).then((res) => {
               const updateObject = {
                 ...action.payload,
@@ -194,8 +181,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                   store.dispatch(setDisableButton(false));
                 });
 
-              console.log(response);
-              console.log("res", res);
             });
           }
         } catch (error) {
@@ -212,7 +197,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
     //Collection Items
 
     case "app/handleNewCollectionItem":
-      console.log("Desde el middle", action.payload);
       store.dispatch(setDisableButton(true));
 
       if (
@@ -229,7 +213,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
         appReducer.image !== null
       ) {
         try {
-          console.log("Desde el middle", store.getState());
           const { appReducer, authReducer } = store.getState();
           const file = new FormData();
           file.append("file", appReducer.image);
@@ -269,9 +252,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                   store.dispatch(setCollectionItemError(""));
                   store.dispatch(setDisableButton(false));
                 });
-
-              console.log(response);
-              console.log("res", res);
             })
             .then(() => {
               store.dispatch(
@@ -299,7 +279,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
     case "app/handleGetCollectionItems":
       store.dispatch(setLoading(true));
       try {
-        console.log(action.payload);
         const response = await client.query({
           collectionItems: [
             { collectionID: action.payload.collectionID.toString() },
@@ -316,7 +295,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
             },
           ],
         });
-        console.log(response.collectionItems);
         store.dispatch(setCollectionItems(response.collectionItems));
         store.dispatch(setLoading(false));
       } catch (error) {
@@ -325,8 +303,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
       break;
 
     case "app/handleEditCollectionItem":
-      console.log("Desde el middle", action.payload);
-      console.log("nosta", appReducer.image);
       store.dispatch(setDisableButton(true));
 
       if (
@@ -340,7 +316,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
         action.payload.condition !== undefined
       ) {
         try {
-          console.log("Desde el middle", store.getState());
 
           if (appReducer.image === null) {
             const updateObject = action.payload;
@@ -363,13 +338,10 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                 store.dispatch(setCollectionError(""));
                 store.dispatch(setDisableButton(false));
               });
-            console.log("response", response);
           } else {
             const file = new FormData();
             file.append("file", appReducer.image);
-            console.warn("File", appReducer.image);
             const url = `${process.env.REACT_APP_API_URI}/uploadImage`;
-            console.log("url", appReducer.image);
 
             axios.post(url, file).then((res) => {
               const updateObject = {
@@ -395,9 +367,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                   store.dispatch(setCollectionItemError(""));
                   store.dispatch(setDisableButton(false));
                 });
-
-              console.log(response);
-              console.log("res", res);
             });
           }
         } catch (error) {
@@ -413,7 +382,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
     case "app/handleGetCollection":
       store.dispatch(setLoading(true));
       try {
-        console.log(action.payload);
         const response = await client.query({
           collection: [
             { collectionID: action.payload.collectionID },
@@ -422,7 +390,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
             },
           ],
         });
-        console.log(response.collection);
         store.dispatch(setCollection(response.collection));
         store.dispatch(setLoading(false));
       } catch (error) {
@@ -432,7 +399,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
 
     case "app/handleDeleteCollectionItem":
       try {
-        console.log(action.payload);
         const response = await client
           .mutation({
             deleteCollectionItem: [{ id: action.payload.id }, { _id: true }],
@@ -444,7 +410,6 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
               })
             );
           });
-        console.log(response);
       } catch (error) {
         console.log("error", error);
       }

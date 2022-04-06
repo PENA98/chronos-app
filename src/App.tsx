@@ -42,7 +42,6 @@ const App: React.FC = () => {
     const now = new Date();
 
     if (!isAuthed || now.getTime() > isAuthed.expires) {
-      console.log(isAuthed);
       localStorage.removeItem("authed");
       return false;
     }

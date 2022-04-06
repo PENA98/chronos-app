@@ -4,7 +4,6 @@ let bearerToken = "";
 try {
   const { accessToken } = JSON.parse(localStorage.getItem("authed")!);
   bearerToken = accessToken
-  console.log("token", accessToken);
   
 } catch (error) {
   console.log("error", error);

@@ -17,9 +17,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { client } from "../graphql/client";
 import { useEffect } from "react";
 import { RootState } from "../redux/store";
-import { handleSignIn, setIsRequired, setLoginSuccess, setShowPassword } from "../redux/authSlice";
+import {
+  handleSignIn,
+  setIsRequired,
+  setLoginSuccess,
+  setShowPassword,
+} from "../redux/authSlice";
 import { Alert, IconButton, InputAdornment } from "@mui/material";
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
@@ -47,13 +52,6 @@ const SignIn: React.FC = () => {
   const data = useSelector((state: RootState) => state.authReducer);
   const dispatch = useDispatch();
   const history = useHistory();
-
-
-  useEffect(() => {
-    if (data.loginSuccess === true) {
-      console.log("login success");
-    }
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -121,11 +119,7 @@ const SignIn: React.FC = () => {
                       }
                       edge="end"
                     >
-                      {data?.showPassword ? (
-                        <Visibility />
-                      ) : (
-                        <VisibilityOff />
-                      )}
+                      {data?.showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -151,7 +145,13 @@ const SignIn: React.FC = () => {
                   </IonItem>
                 </IonCol>
                 <IonCol>
-                  <IonItem routerLink="/SignUp" onClick={() => {dispatch(setShowPassword(false)); dispatch(setIsRequired(""))}}>
+                  <IonItem
+                    routerLink="/SignUp"
+                    onClick={() => {
+                      dispatch(setShowPassword(false));
+                      dispatch(setIsRequired(""));
+                    }}
+                  >
                     <IonText color="secondary">
                       {"Don't have an account? Sign Up"}
                     </IonText>

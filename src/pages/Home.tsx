@@ -79,7 +79,6 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     dispatch(handleGetCollections({}));
-    console.log(appReducer);
   }, []);
 
   return (

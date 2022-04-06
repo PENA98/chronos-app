@@ -14,7 +14,6 @@ export const authMiddle = (store: any) => (next: any) => async (
 ) => {
   switch (action.type) {
     case "auth/handleSignUp":
-      console.log("Desde el middle", action.payload);
       const data = action.payload;
       interface userInterface {
         name: string;
@@ -34,14 +33,12 @@ export const authMiddle = (store: any) => (next: any) => async (
         confirmPassword: data.get("confirmPassword")?.toString()!,
       } as userInterface;
 
-      console.log(" desde la data", userObject);
       const isValid = {
         valid: await checkPasswordValidity(userObject.password || ""),
         confirmPasswordValidity:
           userObject.confirmPassword === userObject.password ? true : false,
       };
       const validEmail = validateEmail(userObject.email);
-      console.log(isValid);
       store.dispatch(setIsValidPassword(isValid));
       store.dispatch(setIsValidEmail(validEmail));
 
@@ -50,7 +47,6 @@ export const authMiddle = (store: any) => (next: any) => async (
           userObject[key as keyof typeof userObject] === undefined ||
           userObject[key as keyof typeof userObject] === ""
         ) {
-          console.log(key);
           store.dispatch(setIsRequired(`${key} is required`));
         } else {
         }
@@ -79,17 +75,15 @@ export const authMiddle = (store: any) => (next: any) => async (
               signup: [{ signupUserInput }, { username: true, _id: true }],
             })
             .then((res) => {
-              console.log(res);
               store.dispatch(setIsRequired(""));
               store.dispatch(setShowPassword(false));
               window.location.replace("#");
             });
 
-          console.log(response);
           store.dispatch(setIsRequired(""));
           store.dispatch(setShowPassword(false));
         } catch (error: any) {
-          console.log("error al guardar",  error.message.split("\n")[0]);
+          console.log("error al guardar", error.message.split("\n")[0]);
           store.dispatch(setIsRequired(error.message.split("\n")[0]));
         }
       }
@@ -101,14 +95,12 @@ export const authMiddle = (store: any) => (next: any) => async (
         username: signInData.get("username")?.toString()!,
         password: signInData.get("password")?.toString()!,
       };
-      console.log("signInObject", signInObject);
 
       for (const key in signInObject) {
         if (
           signInObject[key as keyof typeof signInObject] === undefined ||
           signInObject[key as keyof typeof signInObject] === ""
         ) {
-          console.log(key);
           store.dispatch(setIsRequired(`${key} is required`));
         } else {
         }
@@ -153,7 +145,7 @@ export const authMiddle = (store: any) => (next: any) => async (
                   expires: now.getTime() + 14400000,
                 })
               );
-              console.log(res.login);
+
               window.location.replace("#");
             });
         } catch (error: any) {
