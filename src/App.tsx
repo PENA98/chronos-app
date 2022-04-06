@@ -4,7 +4,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsAuthed } from "./redux/authSlice";
 import Home from "./pages/Home";
-import ViewMessage from "./pages/ViewMessage";
+import CollectionItems from "./pages/CollectionItems";
 import Login from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 
@@ -83,10 +83,10 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/message/:id"
+            path="/collection/:_id"
             exact={true}
             render={(props) =>
-              isAuthenticated() ? <ViewMessage /> : <Redirect to="/login" />
+              isAuthenticated() ? <CollectionItems /> : <Redirect to="/login" />
             }
           />
         </IonRouterOutlet>
