@@ -3,10 +3,10 @@
 
 # Chronos
 A simple Collection tracker app for skills demonstration for Code Éxitos
-I named my app like the Greek god of time "Chronos" 
+I named my app like the Greek god of time "Chronos".
 
-
-
+# Recomendation
+The app is designed with mobile first pattern, it will work better on a mobile device!
 
 ## Live Demo
 
