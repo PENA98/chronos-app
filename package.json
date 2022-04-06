@@ -8,8 +8,14 @@
     "@capacitor/haptics": "1.1.4",
     "@capacitor/keyboard": "1.2.2",
     "@capacitor/status-bar": "1.0.8",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@genql/runtime": "^2.9.0",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
+    "@mui/icons-material": "^5.5.1",
+    "@mui/material": "^5.5.3",
+    "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
@@ -19,9 +25,14 @@
     "@types/react-dom": "^16.9.10",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "axios": "^0.26.1",
+    "connected-react-router": "^6.9.2",
+    "graphql": "^15.8.0",
+    "immer": "^9.0.12",
     "ionicons": "^5.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-redux": "^7.2.8",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.0",
@@ -65,7 +76,8 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "3.4.3"
+    "@capacitor/cli": "3.4.3",
+    "@genql/cli": "^2.9.0"
   },
   "description": "An Ionic project"
 }
