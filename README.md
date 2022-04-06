@@ -119,6 +119,7 @@ chronos
 
 ## Screenshots
 CI/CD Deployment
+
 ![CI/CD](https://imgur.com/FHjT0Xm.png)
 
 You can use gestures like swipe to the right or to the left to edit and delete
