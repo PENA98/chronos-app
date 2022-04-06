@@ -58,4 +58,4 @@ jobs:
           app-name: 'Chronos-app'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C3BACD4A508B440AA8CDA32C16704884 }}
-          package: .
+          package: release.zip
