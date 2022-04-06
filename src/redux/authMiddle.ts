@@ -149,13 +149,9 @@ export const authMiddle = (store: any) => (next: any) => async (
               window.location.replace("#");
             });
         } catch (error: any) {
-          console.log(
-            "error al guardar",
-            JSON.parse(error.message.split("\n")[0])
-          );
           store.dispatch(setIsRequired(""));
           store.dispatch(
-            setLoginError(JSON.parse(error.message.split("\n")[0]).message)
+            setLoginError("Invalid Username or password, please try again")
           );
         }
       }
