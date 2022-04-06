@@ -123,11 +123,9 @@ CI/CD Deployment
 
 You can use gestures like swipe to the right or to the left to edit and delete
 
-Edit
 ![CI/CD](https://imgur.com/d7Acij0.png) 
 
 
-delete
 ![CI/CD](https://imgur.com/bx6Wa6u.png) 
 
 ## Authors
