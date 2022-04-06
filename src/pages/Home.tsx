@@ -1,6 +1,5 @@
 import Collection from "../components/Collection";
 import { useEffect, useState } from "react";
-import { Message, getMessages } from "../data/messages";
 import {
   IonButton,
   IonButtons,
@@ -12,9 +11,6 @@ import {
   IonImg,
   IonInput,
   IonItem,
-  IonItemOption,
-  IonItemOptions,
-  IonItemSliding,
   IonLabel,
   IonList,
   IonPage,
@@ -25,7 +21,6 @@ import {
   IonTitle,
   IonToolbar,
   useIonModal,
-  useIonViewWillEnter,
 } from "@ionic/react";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
 import { styled } from "@mui/material/styles";
@@ -45,16 +40,10 @@ import { RootState } from "../redux/store";
 import { Collection as CollectionType } from "../graphql/generated";
 
 const Home: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [Name, setName] = useState<string>("");
   const [Description, setDescription] = useState<string>("");
   const { appReducer } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
-
-  useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
-  });
 
   const handleDismiss = () => {
     setName("");
@@ -79,7 +68,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     dispatch(handleGetCollections({}));
-  }, []);
+  }, [dispatch]);
 
   return (
     <IonPage id="home-page">
@@ -165,7 +154,7 @@ const Modal: React.FC<iModal> = ({
     if (appReducer.successSaving) {
       onDismiss();
     }
-  }, [appReducer.successSaving]);
+  }, [appReducer.successSaving, onDismiss]);
 
   return (
     <>
@@ -275,7 +264,7 @@ const EditModal: React.FC<iEditModal> = ({ onDismiss, collection }) => {
     if (appReducer.successSaving) {
       onDismiss();
     }
-  }, [appReducer.successSaving]);
+  }, [appReducer.successSaving, onDismiss]);
 
   return (
     <>

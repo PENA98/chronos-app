@@ -2,9 +2,6 @@ import {
   IonBadge,
   IonIcon,
   IonItem,
-  IonItemOption,
-  IonItemOptions,
-  IonItemSliding,
   useIonModal,
   IonLabel,
   IonImg,
@@ -22,15 +19,11 @@ import {
 } from "@ionic/react";
 import { Grid } from "@mui/material";
 import {
-  archive,
-  createOutline,
   ellipsisHorizontalOutline,
 } from "ionicons/icons";
 import "./Collection.css";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch } from "react-redux";
 import {
-  deleteCollectionHandler,
   handleDeleteCollectionItem,
   setSuccessSaving,
 } from "../redux/appSlice";
@@ -113,7 +106,7 @@ const Collection: React.FC<any> = ({ item, modal }) => {
             </IonButton>
           </IonButtons>
         </IonToolbar>
-        <img src={item.image} aspect-ratio="900/600" />
+        <img src={item.image} aspect-ratio="900/600" alt={item.name} />
 
         <IonCardHeader>
           <IonCardTitle>{item.name}</IonCardTitle>

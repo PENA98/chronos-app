@@ -21,7 +21,7 @@ import {
 } from "./appSlice";
 
 export const appMiddle = (store: any) => (next: any) => async (action: any) => {
-  const { appReducer, authReducer } = store.getState();
+  const { appReducer } = store.getState();
   switch (action.type) {
     case "app/handleNewCollection":
       store.dispatch(setDisableButton(true));
@@ -52,7 +52,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                 updatedAt: new Date(),
               };
 
-              const response = client.mutation({
+              client.mutation({
                 createCollection: [
                   { createCollectionInput },
                   {
@@ -117,7 +117,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
     case "app/deleteCollectionHandler":
 
       try {
-        const response = await client.mutation({
+        await client.mutation({
           deleteCollection: [{ _id: action.payload }, { _id: true }],
         });
         store.dispatch(handleGetCollections({}));
@@ -140,7 +140,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
 
           if (appReducer.image === null) {
             const updateObject = action.payload;
-            const response = await client
+            await client
               .mutation({
                 updateCollection: [
                   { updateCollectionInput: updateObject },
@@ -165,8 +165,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                 ...action.payload,
                 image: `${process.env.REACT_APP_API_URI}/${res.data.imagePath}`,
               };
-              const response = client
-                .mutation({
+              client.mutation({
                   updateCollection: [
                     { updateCollectionInput: updateObject },
                     { _id: true },
@@ -213,7 +212,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
         appReducer.image !== null
       ) {
         try {
-          const { appReducer, authReducer } = store.getState();
+          const { appReducer } = store.getState();
           const file = new FormData();
           file.append("file", appReducer.image);
           console.warn("File", appReducer.image);
@@ -233,7 +232,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                 updatedAt: new Date(),
               };
 
-              const response = client
+              client
                 .mutation({
                   createCollectionItem: [
                     { createCollectionItemInput: collectionItem },
@@ -319,7 +318,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
 
           if (appReducer.image === null) {
             const updateObject = action.payload;
-            const response = await client
+            await client
               .mutation({
                 updateCollectionItem: [
                   { collectionItem: updateObject },
@@ -348,8 +347,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
                 ...action.payload,
                 image: `${process.env.REACT_APP_API_URI}/${res.data.imagePath}`,
               };
-              const response = client
-                .mutation({
+              client.mutation({
                   updateCollectionItem: [
                     { collectionItem: updateObject },
                     { _id: true },
@@ -399,7 +397,7 @@ export const appMiddle = (store: any) => (next: any) => async (action: any) => {
 
     case "app/handleDeleteCollectionItem":
       try {
-        const response = await client
+        await client
           .mutation({
             deleteCollectionItem: [{ id: action.payload.id }, { _id: true }],
           })

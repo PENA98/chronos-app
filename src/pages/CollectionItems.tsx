@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
-import { Message, getMessage } from "../data/messages";
 import {
   IonBackButton,
-  IonBadge,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonFab,
   IonFabButton,
@@ -20,7 +13,6 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonNote,
   IonPage,
   IonProgressBar,
   IonSearchbar,
@@ -30,10 +22,9 @@ import {
   IonTitle,
   IonToolbar,
   useIonModal,
-  useIonViewWillEnter,
 } from "@ionic/react";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
-import { add, personCircle } from "ionicons/icons";
+import { add } from "ionicons/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import "./CollectionItems.css";
@@ -47,7 +38,7 @@ import {
   handleEditCollectionItem,
   handleGetCollection,
 } from "../redux/appSlice";
-import { Collection, updateCollectionItemInput } from "../graphql/generated";
+import { updateCollectionItemInput } from "../graphql/generated";
 import { Alert, Box, Button, Grid, Stack, styled } from "@mui/material";
 import CollectionItem from "../components/collectionItem";
 
@@ -60,7 +51,7 @@ const CollectionItems: React.FC = () => {
   useEffect(() => {
     dispatch(handleGetCollectionItems({ collectionID: params._id }));
     dispatch(handleGetCollection({ collectionID: params._id }));
-  }, []);
+  }, [dispatch, params._id]);
 
   const handleDismiss = () => {
     dispatch(setSuccessSaving(false));
@@ -158,7 +149,7 @@ const Modal: React.FC<iModal> = ({ onDismiss, collectionID }) => {
     if (appReducer.successSaving) {
       onDismiss();
     }
-  }, [appReducer.successSaving]);
+  }, [appReducer.successSaving, onDismiss]);
 
   return (
     <>
@@ -304,7 +295,7 @@ const EditModal: React.FC<iEditModal> = ({ onDismiss, collectionItem }) => {
     if (appReducer.successSaving) {
       onDismiss();
     }
-  }, [appReducer.successSaving]);
+  }, [appReducer.successSaving, onDismiss]);
 
   return (
     <>
